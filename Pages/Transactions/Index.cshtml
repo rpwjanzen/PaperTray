@@ -1,0 +1,116 @@
+@page
+@model PaperTray.Pages.Transactions.IndexModel
+@using PaperTray.Models
+@{
+    ViewData["Title"] = "Transactions";
+}
+
+<div>
+    <header>
+        <h1>Transactions</h1>
+        <p>Record money moving into, out of, and between your accounts.</p>
+
+        <form method="post" asp-page-handler="Save" class="grid">
+            <input asp-for="Input.Id" type="hidden" />
+            <div>
+                <label asp-for="Input.Payee">Payee</label>
+                <input asp-for="Input.Payee" autocomplete="off" />
+                <span asp-validation-for="Input.Payee" aria-live="polite"></span>
+            </div>
+            <div>
+                <label asp-for="Input.AccountId">Account</label>
+                <select asp-for="Input.AccountId">
+                    <option value="0">Select an account</option>
+                    @foreach (var account in Model.Accounts)
+                    {
+                        <option value="@account.Id">@account.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="Input.AccountId" aria-live="polite"></span>
+            </div>
+            <div>
+                <label asp-for="Input.EnvelopeId">Envelope <small>(optional)</small></label>
+                <select asp-for="Input.EnvelopeId">
+                    <option value="">No envelope</option>
+                    @foreach (var envelope in Model.Envelopes)
+                    {
+                        <option value="@envelope.Id">@envelope.CategoryName</option>
+                    }
+                </select>
+                <span asp-validation-for="Input.EnvelopeId" aria-live="polite"></span>
+            </div>
+            <div>
+                <label asp-for="Input.Amount">Amount</label>
+                <input asp-for="Input.Amount" type="number" min="0.01" step="0.01" />
+                <span asp-validation-for="Input.Amount" aria-live="polite"></span>
+            </div>
+            <div>
+                <label asp-for="Input.Type">Type</label>
+                <select asp-for="Input.Type" asp-items="Html.GetEnumSelectList<TransactionType>()"></select>
+            </div>
+            <div>
+                <label asp-for="Input.Date">Date</label>
+                <input asp-for="Input.Date" type="date" />
+            </div>
+            <div>
+                <label>
+                    <input asp-for="Input.IsCleared" />
+                    Cleared
+                </label>
+            </div>
+            <div>
+                <button type="submit">@(Model.IsEditing ? "Save changes" : "Add transaction")</button>
+                @if (Model.IsEditing)
+                {
+                    <a asp-page="./Index" role="button" class="secondary">Cancel</a>
+                }
+            </div>
+        </form>
+    </header>
+
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Payee</th>
+                <th scope="col">Account</th>
+                <th scope="col">Envelope</th>
+                <th scope="col">Type</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Status</th>
+                <th scope="col"><span class="visually-hidden">Actions</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Transactions.Count == 0)
+            {
+                <tr>
+                    <td colspan="8">No transactions yet.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var transaction in Model.Transactions)
+                {
+                    <tr>
+                        <td>@transaction.Date.ToString("yyyy-MM-dd")</td>
+                        <td>@transaction.Payee</td>
+                        <td>@transaction.AccountName</td>
+                        <td>@(transaction.EnvelopeName ?? "—")</td>
+                        <td>@transaction.Type</td>
+                        <td>@transaction.Amount.ToString("C")</td>
+                        <td>@(transaction.IsCleared ? "Cleared" : "Uncleared")</td>
+                        <td>
+                            <a asp-page="./Index" asp-route-editId="@transaction.Id">Edit</a>
+                            <form method="post" asp-page-handler="Delete" class="inline-form">
+                                <input type="hidden" name="id" value="@transaction.Id" />
+                                <button type="submit" class="secondary"
+                                        onclick="return confirm('Delete this transaction?');">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

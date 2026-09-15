@@ -63,6 +63,8 @@ async Task InitializeDatabaseAsync(WebApplication webApp)
     db.Open();
     
     string sqlTemplate = """
+    PRAGMA foreign_keys = ON;
+
     CREATE TABLE IF NOT EXISTS Settings (
         Id INTEGER PRIMARY KEY AUTOINCREMENT,
         TotalIncome REAL NOT NULL
@@ -86,6 +88,19 @@ async Task InitializeDatabaseAsync(WebApplication webApp)
 
     CREATE UNIQUE INDEX IF NOT EXISTS IX_Accounts_Name_NoCase
         ON Accounts (Name COLLATE NOCASE);
+
+    CREATE TABLE IF NOT EXISTS Transactions (
+        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+        Payee TEXT NOT NULL,
+        AccountId INTEGER NOT NULL,
+        EnvelopeId INTEGER NULL,
+        Amount REAL NOT NULL,
+        Type TEXT NOT NULL CHECK (Type IN ('Expense', 'Income', 'Transfer')),
+        Date TEXT NOT NULL,
+        IsCleared INTEGER NOT NULL DEFAULT 0,
+        FOREIGN KEY (AccountId) REFERENCES Accounts (Id),
+        FOREIGN KEY (EnvelopeId) REFERENCES Envelopes (Id)
+    );
 
     -- Seed an initial profile/income if empty
     INSERT OR IGNORE INTO Settings (Id, TotalIncome) VALUES (1, 5000.00);
