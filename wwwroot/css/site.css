@@ -76,6 +76,70 @@ h1,h2,h3{ line-height:1.2 } */
       margin-bottom: 40px;
     }
 
+    .transaction-form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px 24px;
+      margin-top: 30px;
+    }
+
+    .transaction-form__field {
+      display: grid;
+      gap: 6px;
+      align-content: start;
+    }
+
+    .transaction-form__field label {
+      color: var(--synth-accent-teal);
+      font-size: 0.9rem;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .transaction-form__field input:not([type="checkbox"]),
+    .transaction-form__field select {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 42px;
+      padding: 8px 10px;
+      border: 1px solid var(--synth-accent-teal);
+      border-radius: 2px;
+      color: var(--synth-text);
+      background: var(--synth-bg);
+      font: inherit;
+    }
+
+    .transaction-form__field input:focus,
+    .transaction-form__field select:focus {
+      outline: 2px solid var(--synth-accent-pink);
+      outline-offset: 2px;
+    }
+
+    .transaction-form__field span {
+      color: #ff9fbd;
+      font-size: 0.85rem;
+    }
+
+    .transaction-form__field--checkbox {
+      align-self: end;
+    }
+
+    .transaction-form__field--checkbox label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 42px;
+    }
+
+    .transaction-form__actions {
+      display: flex;
+      grid-column: 1 / -1;
+      gap: 16px;
+      align-items: center;
+      padding-top: 4px;
+    }
+
     nav {
       display: flex;
       gap: 20px;
@@ -198,6 +262,15 @@ h1,h2,h3{ line-height:1.2 } */
       article {
         flex-direction: column;
       }
+
+      .transaction-form {
+        grid-template-columns: 1fr;
+      }
+
+      .transaction-form__actions {
+        grid-column: auto;
+      }
+
       table {
         display: block;
         overflow-x: auto;
