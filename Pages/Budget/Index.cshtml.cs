@@ -131,7 +131,7 @@ public class IndexModel : PageModel
         var envelopes = await db.QueryAsync<Envelope>("SELECT * FROM Envelopes");
         Envelopes = envelopes.ToList();
         
-        decimal totalIncome = await db.ExecuteScalarAsync<decimal>("SELECT TotalIncome FROM Settings WHERE Id = 1");
+        decimal totalIncome = await GetTotalIncomeAsync(db);
         decimal totalAllocated = Envelopes.Sum(e => e.AllocatedAmount);
         UnallocatedCash = totalIncome - totalAllocated;
     }
@@ -161,7 +161,7 @@ public class IndexModel : PageModel
         );
 
         // 3. Recalculate the overall "Unallocated Cash" pool
-        decimal totalIncome = await db.ExecuteScalarAsync<decimal>("SELECT TotalIncome FROM Settings WHERE Id = 1");
+        decimal totalIncome = await GetTotalIncomeAsync(db);
         decimal totalAllocated = await db.ExecuteScalarAsync<decimal>("SELECT SUM(AllocatedAmount) FROM Envelopes");
         decimal updatedUnallocated = totalIncome - totalAllocated;
 
@@ -183,6 +183,12 @@ public class IndexModel : PageModel
         // Return an EmptyResult because Datastar keeps the stream open and reads chunks 
         // until the connection gracefully terminates.
         return new EmptyResult();
+    }
+
+    private static Task<decimal> GetTotalIncomeAsync(IDbConnection db)
+    {
+        return db.ExecuteScalarAsync<decimal>(
+            "SELECT COALESCE(SUM(Amount), 0) FROM Transactions WHERE Type = 'Income'");
     }
 
     public sealed class AllocationSignals
