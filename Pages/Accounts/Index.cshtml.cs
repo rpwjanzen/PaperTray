@@ -21,14 +21,40 @@ public class IndexModel : PageModel
     [BindProperty]
     public bool NewAccountIsOnBudget { get; set; } = true;
 
+    [BindProperty]
+    public AccountInput EditInput { get; set; } = new();
+
+    public bool IsEditing => EditInput.Id.HasValue;
+
     public IndexModel(Func<IDbConnection> dbFactory)
     {
         _dbFactory = dbFactory;
     }
 
-    public async Task OnGetAsync()
+    public async Task<IActionResult> OnGetAsync(int? editId = null)
     {
         await LoadAccountsAsync();
+
+        if (editId.HasValue)
+        {
+            using var db = _dbFactory();
+            var account = await db.QuerySingleOrDefaultAsync<AccountInput>(
+                """
+                SELECT Id, Name, IsOnBudget
+                FROM Accounts
+                WHERE Id = @Id
+                """,
+                new { Id = editId.Value });
+
+            if (account is null)
+            {
+                return NotFound();
+            }
+
+            EditInput = account;
+        }
+
+        return Page();
     }
 
     public async Task<IActionResult> OnPostAsync()
@@ -67,10 +93,71 @@ public class IndexModel : PageModel
         return RedirectToPage();
     }
 
+    public async Task<IActionResult> OnPostSaveAsync()
+    {
+        EditInput ??= new();
+        EditInput.Name = EditInput.Name?.Trim() ?? string.Empty;
+
+        if (!ModelState.IsValid)
+        {
+            await LoadAccountsAsync();
+            return Page();
+        }
+
+        using var db = _dbFactory();
+        int updated = await db.ExecuteAsync(
+            """
+            UPDATE Accounts
+            SET Name = @Name,
+                IsOnBudget = @IsOnBudget
+            WHERE Id = @Id
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM Accounts
+                  WHERE Name = @Name COLLATE NOCASE
+                    AND Id <> @Id
+              )
+            """,
+            new
+            {
+                EditInput.Id,
+                EditInput.Name,
+                EditInput.IsOnBudget,
+            });
+
+        if (updated == 0)
+        {
+            bool accountExists = await db.ExecuteScalarAsync<bool>(
+                "SELECT EXISTS (SELECT 1 FROM Accounts WHERE Id = @Id)",
+                new { EditInput.Id });
+            if (!accountExists)
+            {
+                return NotFound();
+            }
+
+            ModelState.AddModelError(nameof(EditInput.Name), "An account with this name already exists.");
+            await LoadAccountsAsync();
+            return Page();
+        }
+
+        return RedirectToPage();
+    }
+
     private async Task LoadAccountsAsync()
     {
         using var db = _dbFactory();
         Accounts = (await db.QueryAsync<Account>(
             "SELECT Id, Name, IsOnBudget FROM Accounts ORDER BY Id")).AsList();
+    }
+
+    public sealed class AccountInput
+    {
+        public int? Id { get; set; }
+
+        [Required(ErrorMessage = "Enter an account name.")]
+        [StringLength(100, ErrorMessage = "Account names must be 100 characters or fewer.")]
+        public string Name { get; set; } = string.Empty;
+
+        public bool IsOnBudget { get; set; } = true;
     }
 }
