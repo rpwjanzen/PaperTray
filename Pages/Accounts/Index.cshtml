@@ -1,0 +1,57 @@
+@page
+@model PaperTray.Pages.Accounts.IndexModel
+@{
+    ViewData["Title"] = "Accounts";
+}
+
+<div>
+    <header>
+        <h1>Accounts</h1>
+        <p>Track the accounts that hold your money and whether they participate in your budget.</p>
+
+        <form method="post" class="grid">
+            <div>
+                <label asp-for="NewAccountName">Account name</label>
+                <input asp-for="NewAccountName" autocomplete="off" />
+                <span asp-validation-for="NewAccountName" aria-live="polite"></span>
+            </div>
+            <div>
+                <label>
+                    <input asp-for="NewAccountIsOnBudget" />
+                    On-budget account
+                </label>
+                <small>On-budget accounts are included in your budget. Clear this for an off-budget account.</small>
+            </div>
+            <div>
+                <button type="submit">Add account</button>
+            </div>
+        </form>
+    </header>
+
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">Account</th>
+                <th scope="col">Budget status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Accounts.Count == 0)
+            {
+                <tr>
+                    <td colspan="2">No accounts yet.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var account in Model.Accounts)
+                {
+                    <tr>
+                        <td>@account.Name</td>
+                        <td>@(account.IsOnBudget ? "On-budget" : "Off-budget")</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

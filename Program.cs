@@ -78,6 +78,15 @@ async Task InitializeDatabaseAsync(WebApplication webApp)
     CREATE UNIQUE INDEX IF NOT EXISTS IX_Envelopes_CategoryName_NoCase
         ON Envelopes (CategoryName COLLATE NOCASE);
 
+    CREATE TABLE IF NOT EXISTS Accounts (
+        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+        Name TEXT NOT NULL,
+        IsOnBudget INTEGER NOT NULL DEFAULT 1
+    );
+
+    CREATE UNIQUE INDEX IF NOT EXISTS IX_Accounts_Name_NoCase
+        ON Accounts (Name COLLATE NOCASE);
+
     -- Seed an initial profile/income if empty
     INSERT OR IGNORE INTO Settings (Id, TotalIncome) VALUES (1, 5000.00);
     """;
