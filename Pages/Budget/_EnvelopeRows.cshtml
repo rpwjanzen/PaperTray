@@ -4,17 +4,17 @@
 {
     <tr data-signals="{ allocated_@envelope.Id: @envelope.AllocatedAmount, spent_@envelope.Id: @envelope.SpentAmount }">
         <th scope="row">
-            <form method="post" asp-page-handler="RenameEnvelope" class="inline-form">
+            <form method="post" asp-page-handler="RenameEnvelope">
                 <input type="hidden" name="id" value="@envelope.Id" />
                 <label>
-                    <span class="visually-hidden">Envelope name</span>
+                    <span>Envelope name</span>
                     <input type="text"
                            name="name"
                            value="@envelope.CategoryName"
                            maxlength="100"
                            autocomplete="off" />
                 </label>
-                <button type="submit" class="secondary">Rename</button>
+                <button type="submit">Rename</button>
                 @if (!string.IsNullOrEmpty(envelope.RenameError))
                 {
                     <span aria-live="polite">@envelope.RenameError</span>

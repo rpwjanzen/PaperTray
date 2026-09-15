@@ -1,15 +1,205 @@
-:root {
+/* :root {
   --papertray-bg: #f8fafc;
   --papertray-surface: #ffffff;
   --papertray-border: rgba(15, 23, 42, 0.08);
 }
 
 body{
-  margin:40px auto;
-  max-width:650px;
-  line-height:1.6;
-  font-size:18px;
+  margin: 40px auto;
+  max-width: 1050px;
+  line-height: 1.6;
+  font-size: 18px;
   color:#444;
-  padding:0 10px
+  padding: 0 10px
 }
-h1,h2,h3{ line-height:1.2 }
+h1,h2,h3{ line-height:1.2 } */
+
+    :root {
+      /* Synthwave Theme Colors */
+      --synth-bg: #0d0221;         /* Deep Space Violet */
+      --synth-surface: #1d0033;    /* Midnight Plum */
+      --synth-border: #ff007f;     /* Hot Magenta Grid/Borders */
+      --synth-text: #e0dbff;       /* Soft glowing text */
+      --synth-accent-pink: #ff007f;/* Hot Magenta */
+      --synth-accent-teal: #00f5d4;/* Retrowave Teal */
+      --synth-accent-sun: #ff6700; /* Sunset Orange */
+    }
+
+    body {
+      margin: 40px auto;
+      max-width: 1050px;
+      line-height: 1.6;
+      font-size: 18px;
+      color: var(--synth-text);
+      background-color: var(--synth-bg);
+      background-image: 
+        linear-gradient(rgba(255, 0, 127, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 0, 127, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px; /* Background grid effect */
+      padding: 0 10px;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    h1, h2, h3 { 
+      line-height: 1.2; 
+      color: #fff;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px var(--synth-accent-pink), 0 0 20px var(--synth-accent-pink);
+      border-bottom: 3px double var(--synth-accent-teal);
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      color: var(--synth-accent-teal);
+      text-shadow: 0 0 5px rgba(0, 245, 212, 0.5);
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      color: var(--synth-accent-sun);
+      text-transform: uppercase;
+      margin-top: 0;
+    }
+
+    /* Layout Components via Semantic Tags */
+    header {
+      margin-bottom: 40px;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+      margin-top: 15px;
+    }
+
+    nav a {
+      color: var(--synth-accent-teal);
+      text-decoration: none;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      padding: 5px 10px;
+      border: 1px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #fff;
+      border-color: var(--synth-accent-teal);
+      box-shadow: 0 0 10px var(--synth-accent-teal);
+    }
+
+    main {
+      background: var(--synth-surface);
+      border: 2px solid var(--synth-border);
+      box-shadow: 0 0 20px rgba(255, 0, 127, 0.2);
+      padding: 30px;
+      border-radius: 4px;
+    }
+
+    /* Side-by-Side Split Containers */
+    article {
+      display: flex;
+      gap: 30px;
+      margin-top: 30px;
+      align-items: flex-start;
+    }
+
+    section {
+      flex: 2; /* Main body text takes up 2/3 width */
+    }
+
+    aside {
+      flex: 1; /* Sidebar takes up 1/3 width */
+      background: rgba(13, 2, 33, 0.6);
+      border: 1px solid var(--synth-accent-teal);
+      box-shadow: 0 0 15px rgba(0, 245, 212, 0.1);
+      padding: 20px;
+      border-radius: 4px;
+    }
+
+    /* Data Readout Layout (Table) */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 30px 0;
+      font-size: 0.95rem;
+      background: rgba(13, 2, 33, 0.4);
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+    }
+
+    th {
+      background-color: rgba(255, 0, 127, 0.15);
+      color: var(--synth-accent-pink);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: bold;
+      border-bottom: 2px solid var(--synth-accent-pink);
+    }
+
+    tr {
+      border-bottom: 1px solid rgba(255, 0, 127, 0.15);
+    }
+
+    tr:hover {
+      background-color: rgba(0, 245, 212, 0.05);
+      color: #fff;
+    }
+
+    td {
+      font-family: 'Courier New', Courier, monospace; /* Matrix-like readout style */
+    }
+
+    /* Elements */
+    button {
+      background: transparent;
+      border: 2px solid var(--synth-accent-pink);
+      color: #fff;
+      padding: 10px 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--synth-accent-pink);
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--synth-accent-pink);
+      color: var(--synth-bg);
+      box-shadow: 0 0 20px var(--synth-accent-pink), 0 0 40px var(--synth-accent-pink);
+    }
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 0.85rem;
+      border-top: 1px dashed var(--synth-border);
+      padding-top: 20px;
+      color: rgba(224, 219, 255, 0.6);
+    }
+
+    /* Simple Responsiveness */
+    @media (max-width: 768px) {
+      article {
+        flex-direction: column;
+      }
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+    }

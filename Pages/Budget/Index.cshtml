@@ -11,7 +11,6 @@
         <div id="unallocated-pool">Available to Budget: $@Model.UnallocatedCash.ToString("F2")</div>
 
         <form id="create-envelope-form"
-              class="grid"
               data-signals="{ newEnvelopeName: '' }"
               data-on:submit__prevent="@@post('/budget/CreateEnvelope')">
             <div>

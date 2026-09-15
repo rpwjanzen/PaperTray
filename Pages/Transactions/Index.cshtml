@@ -10,7 +10,7 @@
         <h1>Transactions</h1>
         <p>Record money moving into, out of, and between your accounts.</p>
 
-        <form method="post" asp-page-handler="Save" class="grid">
+        <form method="post" asp-page-handler="Save">
             <input asp-for="Input.Id" type="hidden" />
             <div>
                 <label asp-for="Input.Payee">Payee</label>
@@ -62,7 +62,7 @@
                 <button type="submit">@(Model.IsEditing ? "Save changes" : "Add transaction")</button>
                 @if (Model.IsEditing)
                 {
-                    <a asp-page="./Index" role="button" class="secondary">Cancel</a>
+                    <a asp-page="./Index" role="button">Cancel</a>
                 }
             </div>
         </form>
@@ -78,7 +78,7 @@
                 <th scope="col">Type</th>
                 <th scope="col">Amount</th>
                 <th scope="col">Status</th>
-                <th scope="col"><span class="visually-hidden">Actions</span></th>
+                <th scope="col"><span>Actions</span></th>
             </tr>
         </thead>
         <tbody>
@@ -102,9 +102,9 @@
                         <td>@(transaction.IsCleared ? "Cleared" : "Uncleared")</td>
                         <td>
                             <a asp-page="./Index" asp-route-editId="@transaction.Id">Edit</a>
-                            <form method="post" asp-page-handler="Delete" class="inline-form">
+                            <form method="post" asp-page-handler="Delete">
                                 <input type="hidden" name="id" value="@transaction.Id" />
-                                <button type="submit" class="secondary"
+                                <button type="submit"
                                         onclick="return confirm('Delete this transaction?');">Delete</button>
                             </form>
                         </td>
