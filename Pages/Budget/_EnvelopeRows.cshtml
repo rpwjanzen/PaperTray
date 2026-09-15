@@ -1,0 +1,18 @@
+@model IEnumerable<PaperTray.Models.Envelope>
+
+@foreach (var envelope in Model)
+{
+    <tr data-signals="{ allocated_@envelope.Id: @envelope.AllocatedAmount, spent_@envelope.Id: @envelope.SpentAmount }">
+        <th scope="row">@envelope.CategoryName</th>
+        <td>
+            <label>
+                <span class="visually-hidden">Allocated</span>
+                $<input type="number"
+                       data-bind:allocated_@envelope.Id
+                       data-on:input__delay.500ms="@@post('/budget/UpdateAllocation?id=@envelope.Id')" />
+            </label>
+        </td>
+        <td>$@envelope.SpentAmount</td>
+        <td>$<span data-text="$allocated_@envelope.Id - $spent_@envelope.Id"></span></td>
+    </tr>
+}

@@ -1,0 +1,39 @@
+@page "{handler?}"
+@model PaperTray.Pages.Budget.IndexModel
+@{
+    Layout = "_Layout";
+}
+
+<!-- Main Container tracking the overall Unallocated Income -->
+<div>
+    <header>
+        <h1>Envelope Budget Dashboard</h1>
+        
+        <!-- Target element for backend SSE updates -->
+        <div id="unallocated-pool">Available to Budget: $@Model.UnallocatedCash.ToString("F2")
+        </div>
+
+        <form id="create-envelope-form"
+              data-signals="{ newEnvelopeName: '' }"
+              data-on:submit__prevent="@@post('/budget/CreateEnvelope')">
+            <label asp-for="NewEnvelopeName">New envelope</label>
+            <input asp-for="NewEnvelopeName" data-bind:newEnvelopeName autocomplete="off" />
+            <button type="submit">Create envelope</button>
+            <span id="create-envelope-error" asp-validation-for="NewEnvelopeName" aria-live="polite"></span>
+        </form>
+    </header>
+
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">Envelope</th>
+                <th scope="col">Allocated</th>
+                <th scope="col">Spent</th>
+                <th scope="col">Remaining</th>
+            </tr>
+        </thead>
+        <tbody id="envelopes-body">
+            <partial name="_EnvelopeRows" model="Model.Envelopes" />
+        </tbody>
+    </table>
+</div>
