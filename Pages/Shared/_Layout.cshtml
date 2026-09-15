@@ -3,18 +3,21 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
     <title>@ViewData["Title"] - PaperTray</title>
     <script type="importmap"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@picocss/pico@2.0.6/css/pico.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PaperTray.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header class="site-header">
-        <nav class="site-nav" aria-label="Main navigation">
+        <nav class="site-nav container" aria-label="Main navigation">
             <div class="nav-inner">
                 <a class="brand" asp-area="" asp-page="/Index">PaperTray</a>
                 <div class="nav-links">
                     <a asp-area="" asp-page="/Index">Home</a>
+                    <a asp-area="" asp-page="/Budget/Index">Budget</a>
                     <a asp-area="" asp-page="/Privacy">Privacy</a>
                 </div>
             </div>
@@ -22,13 +25,13 @@
     </header>
 
     <div class="page-shell">
-        <main role="main" class="page-main">
+        <main role="main" class="page-main container">
             @RenderBody()
         </main>
     </div>
 
     <footer class="site-footer">
-        <div>
+        <div class="container">
             &copy; 2026 - PaperTray - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>

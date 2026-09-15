@@ -4,21 +4,23 @@
     Layout = "_Layout";
 }
 
-<!-- Main Container tracking the overall Unallocated Income -->
 <div>
     <header>
         <h1>Envelope Budget Dashboard</h1>
-        
-        <!-- Target element for backend SSE updates -->
-        <div id="unallocated-pool">Available to Budget: $@Model.UnallocatedCash.ToString("F2")
-        </div>
+
+        <div id="unallocated-pool">Available to Budget: $@Model.UnallocatedCash.ToString("F2")</div>
 
         <form id="create-envelope-form"
+              class="grid"
               data-signals="{ newEnvelopeName: '' }"
               data-on:submit__prevent="@@post('/budget/CreateEnvelope')">
-            <label asp-for="NewEnvelopeName">New envelope</label>
-            <input asp-for="NewEnvelopeName" data-bind:newEnvelopeName autocomplete="off" />
-            <button type="submit">Create envelope</button>
+            <div>
+                <label asp-for="NewEnvelopeName">New envelope</label>
+                <input asp-for="NewEnvelopeName" data-bind:newEnvelopeName autocomplete="off" />
+            </div>
+            <div>
+                <button type="submit">Create envelope</button>
+            </div>
             <span id="create-envelope-error" asp-validation-for="NewEnvelopeName" aria-live="polite"></span>
         </form>
     </header>
