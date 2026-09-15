@@ -79,7 +79,17 @@ public class IndexModel : PageModel
                     IsCleared = @IsCleared
                 WHERE Id = @Id
                 """,
-                Input);
+                new
+                {
+                    Input.Id,
+                    Input.Payee,
+                    Input.AccountId,
+                    Input.EnvelopeId,
+                    Input.Amount,
+                    Type = Input.Type.ToString(),
+                    Input.Date,
+                    Input.IsCleared
+                });
 
             if (updated == 0)
             {
@@ -95,7 +105,16 @@ public class IndexModel : PageModel
                 VALUES
                     (@Payee, @AccountId, @EnvelopeId, @Amount, @Type, @Date, @IsCleared)
                 """,
-                Input);
+                new
+                {
+                    Input.Payee,
+                    Input.AccountId,
+                    Input.EnvelopeId,
+                    Input.Amount,
+                    Type = Input.Type.ToString(),
+                    Input.Date,
+                    Input.IsCleared
+                });
         }
 
         return RedirectToPage();
@@ -114,6 +133,10 @@ public class IndexModel : PageModel
         if (Input.Date == default)
         {
             Input.Date = DateTime.Today;
+        }
+        if (!Enum.IsDefined(Input.Type))
+        {
+            ModelState.AddModelError(nameof(Input.Type), "Select a valid transaction type.");
         }
     }
 
