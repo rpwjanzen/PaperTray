@@ -54,6 +54,7 @@ public class IndexModel : PageModel
 
     public async Task<IActionResult> OnPostSaveAsync()
     {
+        Input ??= new();
         NormalizeInput();
         await LoadLookupsAsync();
 
@@ -109,7 +110,7 @@ public class IndexModel : PageModel
 
     private void NormalizeInput()
     {
-        Input.Payee = Input.Payee.Trim();
+        Input.Payee = Input.Payee?.Trim() ?? string.Empty;
         if (Input.Date == default)
         {
             Input.Date = DateTime.Today;
