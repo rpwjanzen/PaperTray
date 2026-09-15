@@ -74,7 +74,10 @@
                         <td>@account.Name</td>
                         <td>@(account.IsOnBudget ? "On-budget" : "Off-budget")</td>
                         <td>
-                            <a asp-page="./Index" asp-route-editId="@account.Id">Edit</a>
+                            <form method="get" asp-page="./Index">
+                                <input type="hidden" name="editId" value="@account.Id" />
+                                <button type="submit">Edit</button>
+                            </form>
                         </td>
                     </tr>
                 }
