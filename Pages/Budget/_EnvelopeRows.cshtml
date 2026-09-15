@@ -6,7 +6,7 @@
         <th scope="row">@envelope.CategoryName</th>
         <td>
             <label>
-                <span class="visually-hidden">Allocated</span>
+                <span>Allocated</span>
                 $<input type="number"
                        data-bind:allocated_@envelope.Id
                        data-on:input__delay.500ms="@@post('/budget/UpdateAllocation?id=@envelope.Id')" />
