@@ -107,6 +107,67 @@ public class IndexModel : PageModel
         return new EmptyResult();
     }
 
+    public async Task<IActionResult> OnPostRenameEnvelopeAsync(int id, string? name)
+    {
+        string newName = name?.Trim() ?? string.Empty;
+        string? validationError = null;
+
+        if (string.IsNullOrWhiteSpace(newName))
+        {
+            validationError = "Enter an envelope name.";
+        }
+        else if (newName.Length > 100)
+        {
+            validationError = "Envelope names must be 100 characters or fewer.";
+        }
+
+        using var db = _dbFactory();
+        if (validationError is null)
+        {
+            bool envelopeExists = await db.ExecuteScalarAsync<bool>(
+                "SELECT EXISTS (SELECT 1 FROM Envelopes WHERE Id = @Id)",
+                new { Id = id });
+            if (!envelopeExists)
+            {
+                return NotFound();
+            }
+
+            bool duplicateName = await db.ExecuteScalarAsync<bool>(
+                """
+                SELECT EXISTS (
+                    SELECT 1
+                    FROM Envelopes
+                    WHERE Id <> @Id
+                      AND CategoryName = @Name COLLATE NOCASE
+                )
+                """,
+                new { Id = id, Name = newName });
+            if (duplicateName)
+            {
+                validationError = "An envelope with this name already exists.";
+            }
+        }
+
+        if (validationError is not null)
+        {
+            await LoadBudgetAsync();
+            Envelope? envelope = Envelopes.SingleOrDefault(envelope => envelope.Id == id);
+            if (envelope is null)
+            {
+                return NotFound();
+            }
+
+            envelope.RenameError = validationError;
+            return Page();
+        }
+
+        await db.ExecuteAsync(
+            "UPDATE Envelopes SET CategoryName = @Name WHERE Id = @Id",
+            new { Name = newName, Id = id });
+
+        return RedirectToPage();
+    }
+
     public sealed class CreateEnvelopeSignals
     {
         public string? NewEnvelopeName { get; set; }
