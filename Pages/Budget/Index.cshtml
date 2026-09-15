@@ -11,16 +11,17 @@
         <div id="unallocated-pool">Available to Budget: $@Model.UnallocatedCash.ToString("F2")</div>
 
         <form id="create-envelope-form"
+              class="form-grid"
               data-signals="{ newEnvelopeName: '' }"
               data-on:submit__prevent="@@post('/budget/CreateEnvelope')">
-            <div>
+            <div class="form-grid__field">
                 <label asp-for="NewEnvelopeName">New envelope</label>
                 <input asp-for="NewEnvelopeName" data-bind:newEnvelopeName autocomplete="off" />
             </div>
-            <div>
+            <div class="form-grid__actions">
                 <button type="submit">Create envelope</button>
             </div>
-            <span id="create-envelope-error" asp-validation-for="NewEnvelopeName" aria-live="polite"></span>
+            <span id="create-envelope-error" class="form-grid__error" asp-validation-for="NewEnvelopeName" aria-live="polite"></span>
         </form>
     </header>
 

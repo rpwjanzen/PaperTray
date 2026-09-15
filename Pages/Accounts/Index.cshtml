@@ -9,20 +9,20 @@
         <h1>Accounts</h1>
         <p>Track the accounts that hold your money and whether they participate in your budget.</p>
 
-        <form method="post">
-            <div>
+        <form method="post" class="form-grid">
+            <div class="form-grid__field">
                 <label asp-for="NewAccountName">Account name</label>
                 <input asp-for="NewAccountName" autocomplete="off" />
                 <span asp-validation-for="NewAccountName" aria-live="polite"></span>
             </div>
-            <div>
+            <div class="form-grid__field form-grid__field--checkbox">
                 <label>
                     <input asp-for="NewAccountIsOnBudget" />
                     On-budget account
                 </label>
                 <small>On-budget accounts are included in your budget. Clear this for an off-budget account.</small>
             </div>
-            <div>
+            <div class="form-grid__actions">
                 <button type="submit">Add account</button>
             </div>
         </form>

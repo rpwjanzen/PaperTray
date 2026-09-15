@@ -10,14 +10,14 @@
         <h1>Transactions</h1>
         <p>Record money moving into, out of, and between your accounts.</p>
 
-        <form method="post" asp-page-handler="Save" class="transaction-form">
+        <form method="post" asp-page-handler="Save" class="form-grid">
             <input asp-for="Input.Id" type="hidden" />
-            <div class="transaction-form__field">
+            <div class="form-grid__field">
                 <label asp-for="Input.Payee">Payee</label>
                 <input asp-for="Input.Payee" autocomplete="off" />
                 <span asp-validation-for="Input.Payee" aria-live="polite"></span>
             </div>
-            <div class="transaction-form__field">
+            <div class="form-grid__field">
                 <label asp-for="Input.AccountId">Account</label>
                 <select asp-for="Input.AccountId">
                     <option value="0">Select an account</option>
@@ -28,7 +28,7 @@
                 </select>
                 <span asp-validation-for="Input.AccountId" aria-live="polite"></span>
             </div>
-            <div class="transaction-form__field">
+            <div class="form-grid__field">
                 <label asp-for="Input.EnvelopeId">Envelope <small>(optional)</small></label>
                 <select asp-for="Input.EnvelopeId">
                     <option value="">No envelope</option>
@@ -39,26 +39,26 @@
                 </select>
                 <span asp-validation-for="Input.EnvelopeId" aria-live="polite"></span>
             </div>
-            <div class="transaction-form__field">
+            <div class="form-grid__field">
                 <label asp-for="Input.Amount">Amount</label>
                 <input asp-for="Input.Amount" type="number" min="0.01" step="0.01" />
                 <span asp-validation-for="Input.Amount" aria-live="polite"></span>
             </div>
-            <div class="transaction-form__field">
+            <div class="form-grid__field">
                 <label asp-for="Input.Type">Type</label>
                 <select asp-for="Input.Type" asp-items="Html.GetEnumSelectList<TransactionType>()"></select>
             </div>
-            <div class="transaction-form__field">
+            <div class="form-grid__field">
                 <label asp-for="Input.Date">Date</label>
                 <input asp-for="Input.Date" type="date" />
             </div>
-            <div class="transaction-form__field transaction-form__field--checkbox">
+            <div class="form-grid__field form-grid__field--checkbox">
                 <label>
                     <input asp-for="Input.IsCleared" />
                     Cleared
                 </label>
             </div>
-            <div class="transaction-form__actions">
+            <div class="form-grid__actions">
                 <button type="submit">@(Model.IsEditing ? "Save changes" : "Add transaction")</button>
                 @if (Model.IsEditing)
                 {
