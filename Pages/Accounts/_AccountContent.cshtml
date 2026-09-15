@@ -1,0 +1,84 @@
+@model PaperTray.Pages.Accounts.IndexModel
+
+<div id="accounts-content">
+    <header>
+        <h1>Accounts</h1>
+        <p>Track the accounts that hold your money and whether they participate in your budget.</p>
+
+        @if (Model.IsEditing)
+        {
+            <form class="form-grid"
+                  data-signals='{"editId": @Model.EditInput.Id, "editName": @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.EditInput.Name)), "editIsOnBudget": @Model.EditInput.IsOnBudget.ToString().ToLowerInvariant()}'
+                  data-on:submit__prevent="@@post('/Accounts?handler=Save')">
+                <input asp-for="EditInput.Id" type="hidden" data-bind:editId />
+                <div class="form-grid__field">
+                    <label asp-for="EditInput.Name">Account name</label>
+                    <input asp-for="EditInput.Name" data-bind:editName autocomplete="off" />
+                    <span asp-validation-for="EditInput.Name" aria-live="polite"></span>
+                </div>
+                <div class="form-grid__field form-grid__field--checkbox">
+                    <label>
+                        <input asp-for="EditInput.IsOnBudget" data-bind:editIsOnBudget />
+                        On-budget account
+                    </label>
+                    <small>On-budget accounts are included in your budget. Clear this for an off-budget account.</small>
+                </div>
+                <div class="form-grid__actions">
+                    <button type="submit">Save changes</button>
+                    <a asp-page="./Index" role="button">Cancel</a>
+                </div>
+            </form>
+        }
+        else
+        {
+            <form method="post" class="form-grid">
+                <div class="form-grid__field">
+                    <label asp-for="NewAccountName">Account name</label>
+                    <input asp-for="NewAccountName" autocomplete="off" />
+                    <span asp-validation-for="NewAccountName" aria-live="polite"></span>
+                </div>
+                <div class="form-grid__field form-grid__field--checkbox">
+                    <label>
+                        <input asp-for="NewAccountIsOnBudget" />
+                        On-budget account
+                    </label>
+                    <small>On-budget accounts are included in your budget. Clear this for an off-budget account.</small>
+                </div>
+                <div class="form-grid__actions">
+                    <button type="submit">Add account</button>
+                </div>
+            </form>
+        }
+    </header>
+
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">Account</th>
+                <th scope="col">Budget status</th>
+                <th scope="col"><span>Actions</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Accounts.Count == 0)
+            {
+                <tr>
+                    <td colspan="3">No accounts yet.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var account in Model.Accounts)
+                {
+                    <tr>
+                        <td>@account.Name</td>
+                        <td>@(account.IsOnBudget ? "On-budget" : "Off-budget")</td>
+                        <td>
+                            <a asp-page="./Index" asp-route-editId="@account.Id">Edit</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
