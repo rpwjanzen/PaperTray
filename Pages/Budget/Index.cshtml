@@ -1,4 +1,4 @@
-@page "{handler?}"
+@page
 @model PaperTray.Pages.Budget.IndexModel
 @{
     Layout = "_Layout";
@@ -12,11 +12,11 @@
 
         <form id="create-envelope-form"
               class="form-grid"
-              data-signals="{ newEnvelopeName: '' }"
-              data-on:submit__prevent="@@post('/budget/CreateEnvelope')">
+              method="post"
+              asp-page-handler="CreateEnvelope">
             <div class="form-grid__field">
                 <label asp-for="NewEnvelopeName">New envelope</label>
-                <input asp-for="NewEnvelopeName" data-bind:newEnvelopeName autocomplete="off" />
+                <input asp-for="NewEnvelopeName" autocomplete="off" />
             </div>
             <div class="form-grid__actions">
                 <button type="submit">Create envelope</button>

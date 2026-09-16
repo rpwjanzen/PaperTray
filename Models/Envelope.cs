@@ -8,6 +8,5 @@ public class Envelope
     public decimal SpentAmount { get; set; }
     public string? RenameError { get; set; }
     
-    // Calculated property for Datastar local bindings
     public decimal Balance => AllocatedAmount - SpentAmount;
 }

@@ -1,20 +1,9 @@
 using System.Data;
 using Microsoft.Data.Sqlite;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using StarFederation.Datastar.DependencyInjection;
-using PaperTray.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Register Datastar Services
-builder.Services.AddDatastar()
-    .AddJsonOptions(options =>
-    {
-        options.Converters.Add(new JsonStringEnumConverter());
-    });
-
-// 2. Register SQLite Connection Factory for Dapper
+// Register a fresh SQLite connection for each Razor Page operation.
 // Registering as a Func<IDbConnection> ensures a fresh connection is created 
 // whenever a Razor Page requests it, and properly disposed of after use.
 builder.Services.AddScoped<Func<IDbConnection>>(sp =>
@@ -25,14 +14,10 @@ builder.Services.AddScoped<Func<IDbConnection>>(sp =>
     return () => new SqliteConnection(connectionString);
 });
 
-// 3. Register Razor Pages
 builder.Services.AddRazorPages();
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<IViewRenderService, RazorViewRenderService>();
 
 var app = builder.Build();
 
-// 4. (Optional) Run Database Initializer migrations on startup
 await InitializeDatabaseAsync(app);
 
 if (!app.Environment.IsDevelopment())

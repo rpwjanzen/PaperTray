@@ -2,7 +2,7 @@
 
 @foreach (var envelope in Model)
 {
-    <tr data-signals="{ allocated_@envelope.Id: @envelope.AllocatedAmount, spent_@envelope.Id: @envelope.SpentAmount }">
+    <tr>
         <th scope="row">
             <form method="post" asp-page-handler="RenameEnvelope">
                 <input type="hidden" name="id" value="@envelope.Id" />
@@ -22,14 +22,16 @@
             </form>
         </th>
         <td>
-            <label>
-                <span>Allocated</span>
-                $<input type="number"
-                       data-bind:allocated_@envelope.Id
-                       data-on:input__delay.500ms="@@post('/budget/UpdateAllocation?id=@envelope.Id')" />
-            </label>
+            <form method="post" asp-page-handler="UpdateAllocation">
+                <input type="hidden" name="id" value="@envelope.Id" />
+                <label>
+                    <span>Allocated</span>
+                    $<input type="number" name="allocated" value="@envelope.AllocatedAmount" min="0" step="0.01" />
+                </label>
+                <button type="submit">Update</button>
+            </form>
         </td>
         <td>$@envelope.SpentAmount</td>
-        <td>$<span data-text="$allocated_@envelope.Id - $spent_@envelope.Id"></span></td>
+        <td>$@envelope.Balance</td>
     </tr>
 }
